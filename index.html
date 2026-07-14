@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas IA & ML — Grille comparative des modèles</title>
+<meta name="description" content="Grille comparative de 16 familles de modèles d'IA et de Machine Learning : problèmes, business cases par industrie, architectures de référence et bibliothèques Python.">
+<link rel="stylesheet" href="assets/css/theme.css">
+<link rel="stylesheet" href="assets/css/grid.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="brand" href="index.html">Atlas <span>IA·ML</span></a>
+  <div class="navlinks">
+    <a href="index.html" class="navbtn active">Grille comparative</a>
+    <a href="fiches.html" class="navbtn">Fiches Métier × Technique</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="inner">
+    <p class="kicker">Atlas IA &amp; ML — Référentiel technique · Volet 1</p>
+    <h1>Grille comparative des modèles d'IA &amp; Machine Learning</h1>
+    <p class="sub">16 familles de modèles — du ML classique aux agents IA : type de problème et sous-classement ML, business cases les plus significatifs par industrie, et une architecture de référence pour le cas d'usage phare de chaque famille, avec les bibliothèques Python les plus utilisées pour chaque composant. Statistiques d'adoption sourcées Gartner et McKinsey (2025–2026).</p>
+    <div class="legend">
+      <span class="lt">Légende des paradigmes :</span>
+      <span class="badge b-sup">Supervisé</span>
+      <span class="badge b-unsup">Non supervisé</span>
+      <span class="badge b-self">Auto-supervisé</span>
+      <span class="badge b-deep">Deep learning</span>
+      <span class="badge b-gen">Génératif</span>
+      <span class="badge b-sys">Système LLM</span>
+      <span class="badge b-rl">Renforcement</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="ghead">
+  <span>Modèle</span>
+  <span>Problèmes &amp; type de ML</span>
+  <span>Business cases par industrie</span>
+  <span>Architecture type — cas d'usage phare · stack Python</span>
+</div>
+
+<h2 class="group">01 · ML classique supervisé <span class="n">prédire une cible connue à partir de données étiquetées, surtout tabulaires</span></h2>
+
+<!-- 0. Régression linéaire / logistique -->
+<article class="row">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <line x1="8" y1="6" x2="8" y2="50" stroke="#97B8BB" stroke-width="1.2"/>
+      <line x1="8" y1="50" x2="66" y2="50" stroke="#97B8BB" stroke-width="1.2"/>
+      <path d="M12 47 C 30 47, 44 11, 64 9" fill="none" stroke="#00617E" stroke-width="1.4" stroke-dasharray="4 3" opacity="0.7"/>
+      <line x1="10" y1="44" x2="64" y2="12" stroke="#ABC022" stroke-width="2"/>
+      <circle cx="14" cy="40" r="2.8" fill="#0099A5"/><circle cx="20" cy="42" r="2.8" fill="#0099A5"/>
+      <circle cx="26" cy="33" r="2.8" fill="#0099A5"/><circle cx="33" cy="34" r="2.8" fill="#0099A5"/>
+      <circle cx="40" cy="26" r="2.8" fill="#0099A5"/><circle cx="47" cy="21" r="2.8" fill="#0099A5"/>
+      <circle cx="54" cy="22" r="2.8" fill="#0099A5"/><circle cx="60" cy="14" r="2.8" fill="#0099A5"/>
+    </svg>
+    <h3>Régression</h3>
+    <span class="alias">Linéaire · Logistique · GLM</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-sup">Supervisé</span></div>
+    <p><b>Sous-classement :</b> modèles linéaires / statistiques (famille GLM) — linéaire pour une valeur continue, logistique pour une probabilité de classe (sigmoïde).</p>
+    <p><b>Tâches :</b> régression, classification probabiliste, inférence statistique (coefficients, odds ratios, intervalles de confiance).</p>
+    <p><b>Problèmes types :</b> quantifier l'effet marginal de chaque variable ; baseline de référence avant tout modèle plus complexe.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Banque</b> — scorecards de probabilité de défaut (PD) : la logistique reste le standard réglementaire (Bâle, IFRS 9).</p>
+    <p><b>Assurance</b> — tarification actuarielle par GLM (fréquence × coût des sinistres).</p>
+    <p><b>Santé / épidémiologie</b> — facteurs de risque exprimés en odds ratios dans les études cliniques.</p>
+    <p><b>Immobilier / pricing</b> — modèles hédoniques et élasticités prix.</p>
+    <span class="stat">Enquêtes Kaggle (State of ML &amp; DS) : la régression linéaire / logistique est l'algorithme le plus utilisé par les data scientists (plus de 80 % déclarent l'employer), devant les arbres et le boosting.</span>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Scorecard de probabilité de défaut (PD) — risque de crédit</p>
+    <div class="pipe">
+      <span class="step">Historique prêts &amp; défauts<span class="lib">pandas · SQLAlchemy</span></span>
+      <span class="arr">→</span>
+      <span class="step">Discrétisation + WoE / IV<span class="lib">optbinning</span></span>
+      <span class="arr">→</span>
+      <span class="step">Régression logistique<span class="lib">statsmodels · sklearn LogisticRegression</span></span>
+      <span class="arr">→</span>
+      <span class="step">Conversion en points de score (PDO)<span class="lib">numpy</span></span>
+      <span class="arr">→</span>
+      <span class="step">Backtesting (AUC, Gini, KS) &amp; calibration<span class="lib">sklearn.metrics · scipy.stats</span></span>
+      <span class="arr">→</span>
+      <span class="step">Décision + reporting réglementaire<span class="lib">FastAPI</span></span>
+    </div>
+    <p class="note">Coefficients auditables et monotonie contrôlée : c'est pourquoi la logistique reste dominante en risque de crédit réglementé, souvent en champion-challenger face au gradient boosting.</p>
+  </div>
+</article>
+
+<!-- 1. CART -->
+<article class="row">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <line x1="36" y1="10" x2="18" y2="27" stroke="#5D848A" stroke-width="1.5"/>
+      <line x1="36" y1="10" x2="54" y2="27" stroke="#5D848A" stroke-width="1.5"/>
+      <line x1="18" y1="27" x2="9" y2="44" stroke="#5D848A" stroke-width="1.5"/>
+      <line x1="18" y1="27" x2="27" y2="44" stroke="#5D848A" stroke-width="1.5"/>
+      <line x1="54" y1="27" x2="45" y2="44" stroke="#5D848A" stroke-width="1.5"/>
+      <line x1="54" y1="27" x2="63" y2="44" stroke="#5D848A" stroke-width="1.5"/>
+      <circle cx="36" cy="9" r="5.5" fill="#0099A5"/>
+      <circle cx="18" cy="27" r="4.5" fill="#00617E"/>
+      <circle cx="54" cy="27" r="4.5" fill="#00617E"/>
+      <circle cx="9" cy="45" r="3.5" fill="#ABC022"/>
+      <circle cx="27" cy="45" r="3.5" fill="#ABC022"/>
+      <circle cx="45" cy="45" r="3.5" fill="#ABC022"/>
+      <circle cx="63" cy="45" r="3.5" fill="#ABC022"/>
+    </svg>
+    <h3>Arbre de décision</h3>
+    <span class="alias">CART (Classification And Regression Tree)</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-sup">Supervisé</span></div>
+    <p><b>Sous-classement :</b> modèle interprétable (« white-box »), non paramétrique, partitionnement récursif par règles si/alors.</p>
+    <p><b>Tâches :</b> classification &amp; régression.</p>
+    <p><b>Problèmes types :</b> décision explicable et auditable, scoring simple, segmentation par règles métier lisibles.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Banque / assurance</b> — octroi de crédit et éligibilité, où l'explicabilité de chaque décision est exigée (RGPD, AI Act).</p>
+    <p><b>Santé</b> — arbres de triage et protocoles d'aide à la décision clinique.</p>
+    <p><b>Secteur public</b> — attribution d'aides et contrôle d'éligibilité traçable.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Scoring crédit explicable — banque de détail</p>
+    <div class="pipe">
+      <span class="step">Données client &amp; historique<span class="lib">pandas · SQLAlchemy</span></span>
+      <span class="arr">→</span>
+      <span class="step">Variables métier<span class="lib">sklearn ColumnTransformer</span></span>
+      <span class="arr">→</span>
+      <span class="step">CART (profondeur limitée, élagage)<span class="lib">sklearn DecisionTreeClassifier</span></span>
+      <span class="arr">→</span>
+      <span class="step">Règles si/alors<span class="lib">sklearn export_text · dtreeviz</span></span>
+      <span class="arr">→</span>
+      <span class="step">Décision + motif restitué au client<span class="lib">FastAPI</span></span>
+    </div>
+    <p class="note">Le critère de choix est la traçabilité réglementaire de la décision, pas la performance brute — l'arbre sert souvent de référence explicable face à un modèle plus complexe.</p>
+  </div>
+</article>
+
+<!-- 2. RF / Gradient Boosting -->
+<article class="row">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#5D848A" stroke-width="1.3">
+        <line x1="13" y1="14" x2="6" y2="30"/><line x1="13" y1="14" x2="20" y2="30"/>
+        <line x1="36" y1="10" x2="29" y2="26"/><line x1="36" y1="10" x2="43" y2="26"/>
+        <line x1="59" y1="14" x2="52" y2="30"/><line x1="59" y1="14" x2="66" y2="30"/>
+      </g>
+      <circle cx="13" cy="13" r="4" fill="#0099A5"/><circle cx="6" cy="31" r="3" fill="#ABC022"/><circle cx="20" cy="31" r="3" fill="#ABC022"/>
+      <circle cx="36" cy="9" r="4" fill="#00617E"/><circle cx="29" cy="27" r="3" fill="#ABC022"/><circle cx="43" cy="27" r="3" fill="#ABC022"/>
+      <circle cx="59" cy="13" r="4" fill="#0099A5"/><circle cx="52" cy="31" r="3" fill="#ABC022"/><circle cx="66" cy="31" r="3" fill="#ABC022"/>
+      <path d="M10 44 h52" stroke="#97B8BB" stroke-width="1.2"/>
+      <path d="M36 38 v10" stroke="#0099A5" stroke-width="2"/>
+      <path d="M32 46 l4 6 l4 -6" fill="#0099A5"/>
+    </svg>
+    <h3>Random Forest / Gradient Boosting</h3>
+    <span class="alias">XGBoost · LightGBM · CatBoost</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-sup">Supervisé</span></div>
+    <p><b>Sous-classement :</b> méthodes d'ensemble — bagging (Random Forest) et boosting séquentiel (XGBoost, LightGBM, CatBoost).</p>
+    <p><b>Tâches :</b> classification, régression, ranking.</p>
+    <p><b>Problèmes types :</b> référence de facto sur données tabulaires structurées ; performance élevée avec relations non linéaires et interactions de variables.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Finance</b> — détection de fraude par carte et scoring de risque de crédit.</p>
+    <p><b>Assurance</b> — tarification et prédiction de la sinistralité.</p>
+    <p><b>Télécom / retail</b> — churn, propension à l'achat, valeur client (CLV).</p>
+    <p><b>Industrie / énergie</b> — maintenance prédictive sur indicateurs capteurs agrégés.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Détection de fraude en quasi temps réel — paiements</p>
+    <div class="pipe">
+      <span class="step">Flux transactions<span class="lib">confluent-kafka</span></span>
+      <span class="arr">→</span>
+      <span class="step">Feature store (agrégats glissants 1 h / 24 h / 30 j)<span class="lib">Feast</span></span>
+      <span class="arr">→</span>
+      <span class="step">XGBoost → score 0–1<span class="lib">xgboost · scikit-learn</span></span>
+      <span class="arr">→</span>
+      <span class="step">Seuils + règles métier<span class="lib">numpy</span></span>
+      <span class="arr">→</span>
+      <span class="step">Blocage / file analystes<span class="lib">shap (explication) · FastAPI</span></span>
+    </div>
+    <p class="note">Monitoring du drift des données (Evidently) et réentraînement programmé (MLflow) : la fraude évolue en permanence pour contourner le modèle.</p>
+  </div>
+</article>
+
+<!-- 3. SVM -->
+<article class="row">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <line x1="8" y1="50" x2="62" y2="6" stroke="#00617E" stroke-width="2"/>
+      <line x1="2" y1="44" x2="56" y2="0" stroke="#97B8BB" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="14" y1="56" x2="68" y2="12" stroke="#97B8BB" stroke-width="1" stroke-dasharray="3 3"/>
+      <circle cx="12" cy="12" r="3.5" fill="#0099A5"/><circle cx="22" cy="18" r="3.5" fill="#0099A5"/>
+      <circle cx="10" cy="26" r="3.5" fill="#0099A5"/><circle cx="26" cy="8" r="3.5" fill="#0099A5"/>
+      <circle cx="50" cy="40" r="3.5" fill="#ABC022"/><circle cx="60" cy="33" r="3.5" fill="#ABC022"/>
+      <circle cx="46" cy="49" r="3.5" fill="#ABC022"/><circle cx="61" cy="47" r="3.5" fill="#ABC022"/>
+    </svg>
+    <h3>SVM / SVR</h3>
+    <span class="alias">Support Vector Machines / Regression</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-sup">Supervisé</span></div>
+    <p><b>Sous-classement :</b> classification à marge maximale et régression ; « kernel trick » pour les frontières non linéaires.</p>
+    <p><b>Tâches :</b> classification binaire/multi-classes, régression, détection de nouveauté (one-class SVM).</p>
+    <p><b>Problèmes types :</b> haute dimension avec peu d'échantillons — là où le deep learning sur-apprend.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Santé / bio-informatique</b> — classification de profils génomiques ou protéomiques (milliers de variables, dizaines de patients).</p>
+    <p><b>Industrie</b> — détection de défauts sur signaux capteurs (vibratoire, acoustique).</p>
+    <p><b>Finance / juridique</b> — catégorisation documentaire sur corpus restreints.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Contrôle qualité sur signaux capteurs — usine</p>
+    <div class="pipe">
+      <span class="step">Signal vibratoire machine<span class="lib">numpy</span></span>
+      <span class="arr">→</span>
+      <span class="step">Descripteurs (FFT, statistiques)<span class="lib">scipy.signal · tsfresh</span></span>
+      <span class="arr">→</span>
+      <span class="step">SVM noyau RBF<span class="lib">sklearn SVC</span></span>
+      <span class="arr">→</span>
+      <span class="step">Conforme / défaut<span class="lib">joblib (modèle sérialisé)</span></span>
+      <span class="arr">→</span>
+      <span class="step">Alerte ligne + traçabilité lot<span class="lib">paho-mqtt · FastAPI</span></span>
+    </div>
+    <p class="note">Peu de données de défauts suffisent ; le one-class SVM permet même d'apprendre uniquement sur le régime « conforme ».</p>
+  </div>
+</article>
+
+<h2 class="group">02 · ML non supervisé <span class="n">découvrir structures, motifs et anomalies dans des données non étiquetées</span></h2>
+
+<!-- 4. Clustering -->
+<article class="row unsup">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="16" cy="15" rx="13" ry="10" fill="none" stroke="#0099A5" stroke-width="1.2" stroke-dasharray="3 3"/>
+      <ellipse cx="55" cy="16" rx="13" ry="10" fill="none" stroke="#ABC022" stroke-width="1.2" stroke-dasharray="3 3"/>
+      <ellipse cx="36" cy="43" rx="14" ry="10" fill="none" stroke="#00617E" stroke-width="1.2" stroke-dasharray="3 3"/>
+      <circle cx="12" cy="13" r="2.6" fill="#0099A5"/><circle cx="20" cy="17" r="2.6" fill="#0099A5"/><circle cx="17" cy="11" r="2.6" fill="#0099A5"/>
+      <circle cx="51" cy="14" r="2.6" fill="#ABC022"/><circle cx="59" cy="18" r="2.6" fill="#ABC022"/><circle cx="56" cy="12" r="2.6" fill="#ABC022"/>
+      <circle cx="31" cy="42" r="2.6" fill="#00617E"/><circle cx="40" cy="45" r="2.6" fill="#00617E"/><circle cx="37" cy="39" r="2.6" fill="#00617E"/>
+      <circle cx="67" cy="46" r="2.2" fill="#5D848A"/>
+    </svg>
+    <h3>Clustering</h3>
+    <span class="alias">K-means · DBSCAN · GMM · hiérarchique</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-unsup">Non supervisé</span></div>
+    <p><b>Sous-classement :</b> partition (K-means), densité avec bruit (DBSCAN), probabiliste (GMM), dendrogramme (hiérarchique).</p>
+    <p><b>Tâches :</b> segmentation, découverte de structure, détection d'anomalies (points hors densité).</p>
+    <p><b>Problèmes types :</b> regrouper des observations similaires sans étiquettes préalables.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Retail / marketing</b> — segmentation client (RFM, comportements) pour personnaliser les campagnes.</p>
+    <p><b>Cybersécurité</b> — anomalies de trafic réseau via DBSCAN (le « bruit » = suspect).</p>
+    <p><b>Mobilité / urbanisme</b> — zones de demande et hotspots à partir de traces GPS.</p>
+    <p><b>Télécom</b> — profils d'usage pour le dimensionnement des offres.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Segmentation client pour l'activation marketing</p>
+    <div class="pipe">
+      <span class="step">DWH / CDP<span class="lib">pandas.read_sql · SQLAlchemy</span></span>
+      <span class="arr">→</span>
+      <span class="step">Features RFM + comportement<span class="lib">pandas</span></span>
+      <span class="arr">→</span>
+      <span class="step">Standardisation + PCA<span class="lib">sklearn StandardScaler · PCA</span></span>
+      <span class="arr">→</span>
+      <span class="step">K-means (k choisi par silhouette)<span class="lib">sklearn KMeans · silhouette_score</span></span>
+      <span class="arr">→</span>
+      <span class="step">Personas<span class="lib">seaborn (profilage)</span></span>
+      <span class="arr">→</span>
+      <span class="step">Activation CRM &amp; mesure<span class="lib">requests (API CRM)</span></span>
+    </div>
+    <p class="note">Les segments sont relus et nommés avec le métier : un cluster n'a de valeur que s'il est actionnable.</p>
+  </div>
+</article>
+
+<!-- 5. Association / Reco -->
+<article class="row unsup">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#5D848A" stroke-width="1.3">
+        <line x1="22" y1="24" x2="30" y2="15"/><line x1="22" y1="30" x2="30" y2="41"/>
+        <line x1="42" y1="14" x2="52" y2="23"/><line x1="42" y1="42" x2="52" y2="32"/>
+      </g>
+      <rect x="8" y="21" width="13" height="13" rx="3" fill="#0099A5"/>
+      <rect x="30" y="7" width="13" height="13" rx="3" fill="#ABC022"/>
+      <rect x="30" y="35" width="13" height="13" rx="3" fill="#00617E"/>
+      <rect x="52" y="21" width="13" height="13" rx="3" fill="#FDC603"/>
+      <path d="M49 24 l4 3.5 l-4 3.5" fill="none" stroke="#5D848A" stroke-width="1.3"/>
+    </svg>
+    <h3>Règles d'association / Recommandation</h3>
+    <span class="alias">Apriori · FP-Growth · filtrage collaboratif</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-unsup">Non supervisé</span></div>
+    <p><b>Sous-classement :</b> fouille de motifs fréquents (support, confiance, lift) ; recommandation par filtrage collaboratif, factorisation de matrices (ALS), approches hybrides.</p>
+    <p><b>Problèmes types :</b> « qui achète A achète B », personnalisation de l'offre, cold start (résolu par le contenu).</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>E-commerce</b> — cross-sell « fréquemment achetés ensemble », moteur historique d'Amazon.</p>
+    <p><b>Streaming / médias</b> — recommandation de contenus, cœur de l'engagement (Netflix, Spotify).</p>
+    <p><b>Grande distribution</b> — assortiment, promotions liées et placement rayon.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Moteur de recommandation e-commerce</p>
+    <div class="pipe">
+      <span class="step">Logs événements (vues, paniers, achats)<span class="lib">PySpark</span></span>
+      <span class="arr">→</span>
+      <span class="step">FP-Growth (associations)<span class="lib">mlxtend · pyspark.ml.fpm</span></span>
+      <span class="arr">+</span>
+      <span class="step">ALS (collaboratif)<span class="lib">implicit · pyspark ALS</span></span>
+      <span class="arr">→</span>
+      <span class="step">Fusion &amp; ranking hybride<span class="lib">LightGBM (learning-to-rank)</span></span>
+      <span class="arr">→</span>
+      <span class="step">API temps réel (&lt;100 ms)<span class="lib">FastAPI · redis-py</span></span>
+      <span class="arr">→</span>
+      <span class="step">A/B test panier moyen<span class="lib">scipy.stats · statsmodels</span></span>
+    </div>
+    <p class="note">La valeur se prouve en A/B test sur le revenu par session, jamais sur la seule précision offline.</p>
+  </div>
+</article>
+
+<!-- 6. Réduction de dimension / AE -->
+<article class="row unsup">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="8" width="9" height="40" rx="2" fill="#0099A5"/>
+      <rect x="32" y="21" width="8" height="14" rx="2" fill="#ABC022"/>
+      <rect x="57" y="8" width="9" height="40" rx="2" fill="#75A0D2"/>
+      <line x1="15" y1="10" x2="32" y2="23" stroke="#5D848A" stroke-width="1.2"/>
+      <line x1="15" y1="46" x2="32" y2="33" stroke="#5D848A" stroke-width="1.2"/>
+      <line x1="40" y1="23" x2="57" y2="10" stroke="#5D848A" stroke-width="1.2"/>
+      <line x1="40" y1="33" x2="57" y2="46" stroke="#5D848A" stroke-width="1.2"/>
+    </svg>
+    <h3>Réduction de dimension / Autoencodeurs</h3>
+    <span class="alias">PCA · SVD · Autoencoders</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-unsup">Non supervisé</span><span class="badge b-self">Auto-supervisé (AE)</span></div>
+    <p><b>Sous-classement :</b> projections linéaires (PCA/SVD) ; autoencodeurs = réseaux compressant puis reconstruisant l'entrée (goulot d'étranglement non linéaire).</p>
+    <p><b>Problèmes types :</b> compression, débruitage, embeddings, visualisation, anomalie par erreur de reconstruction.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Finance</b> — extraction de facteurs de risque (PCA sur les rendements d'actifs).</p>
+    <p><b>Industrie 4.0</b> — détection d'anomalies capteurs par autoencodeur (l'anormal se reconstruit mal).</p>
+    <p><b>Tous secteurs</b> — pré-traitement et réduction de bruit avant un modèle supervisé.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Détection d'anomalies IoT industriel</p>
+    <div class="pipe">
+      <span class="step">Séries multi-capteurs<span class="lib">influxdb-client · pandas</span></span>
+      <span class="arr">→</span>
+      <span class="step">Fenêtrage + normalisation<span class="lib">numpy · sklearn</span></span>
+      <span class="arr">→</span>
+      <span class="step">Autoencodeur entraîné sur régime nominal<span class="lib">PyTorch / Keras</span></span>
+      <span class="arr">→</span>
+      <span class="step">Erreur de reconstruction<span class="lib">numpy (MSE)</span></span>
+      <span class="arr">→</span>
+      <span class="step">Seuil adaptatif<span class="lib">scipy.stats</span></span>
+      <span class="arr">→</span>
+      <span class="step">Alerte maintenance<span class="lib">paho-mqtt</span></span>
+    </div>
+    <p class="note">Aucune étiquette de panne nécessaire : le modèle n'apprend que le fonctionnement normal, tout écart devient un signal.</p>
+  </div>
+</article>
+
+<h2 class="group">03 · Deep learning <span class="n">réseaux de neurones profonds — perception, séquences et représentation</span></h2>
+
+<!-- 7. MLP -->
+<article class="row deep">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#97B8BB" stroke-width="0.9">
+        <line x1="13" y1="12" x2="36" y2="9"/><line x1="13" y1="12" x2="36" y2="23"/><line x1="13" y1="12" x2="36" y2="37"/><line x1="13" y1="12" x2="36" y2="50"/>
+        <line x1="13" y1="28" x2="36" y2="9"/><line x1="13" y1="28" x2="36" y2="23"/><line x1="13" y1="28" x2="36" y2="37"/><line x1="13" y1="28" x2="36" y2="50"/>
+        <line x1="13" y1="44" x2="36" y2="9"/><line x1="13" y1="44" x2="36" y2="23"/><line x1="13" y1="44" x2="36" y2="37"/><line x1="13" y1="44" x2="36" y2="50"/>
+        <line x1="36" y1="9" x2="59" y2="21"/><line x1="36" y1="23" x2="59" y2="21"/><line x1="36" y1="37" x2="59" y2="21"/><line x1="36" y1="50" x2="59" y2="21"/>
+        <line x1="36" y1="9" x2="59" y2="38"/><line x1="36" y1="23" x2="59" y2="38"/><line x1="36" y1="37" x2="59" y2="38"/><line x1="36" y1="50" x2="59" y2="38"/>
+      </g>
+      <circle cx="13" cy="12" r="4" fill="#0099A5"/><circle cx="13" cy="28" r="4" fill="#0099A5"/><circle cx="13" cy="44" r="4" fill="#0099A5"/>
+      <circle cx="36" cy="9" r="4" fill="#75A0D2"/><circle cx="36" cy="23" r="4" fill="#75A0D2"/><circle cx="36" cy="37" r="4" fill="#75A0D2"/><circle cx="36" cy="50" r="4" fill="#75A0D2"/>
+      <circle cx="59" cy="21" r="4" fill="#ABC022"/><circle cx="59" cy="38" r="4" fill="#ABC022"/>
+    </svg>
+    <h3>Réseaux neuronaux denses</h3>
+    <span class="alias">MLP (Multi-Layer Perceptron)</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-sup">Supervisé</span><span class="badge b-deep">Deep learning</span></div>
+    <p><b>Sous-classement :</b> couches entièrement connectées + activations non linéaires ; approximateur universel de fonctions.</p>
+    <p><b>Tâches :</b> classification &amp; régression sur données tabulaires ou features déjà extraites ; brique de base de toutes les architectures profondes.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Énergie</b> — prévision de charge et de consommation à court terme.</p>
+    <p><b>AdTech</b> — prédiction de clic (couches denses des modèles « wide &amp; deep »).</p>
+    <p><b>Finance</b> — pricing et scoring quand les interactions sont fortement non linéaires.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Prévision de consommation électrique J+1</p>
+    <div class="pipe">
+      <span class="step">Historique conso + météo + calendrier<span class="lib">pandas · requests (API météo)</span></span>
+      <span class="arr">→</span>
+      <span class="step">Normalisation<span class="lib">sklearn StandardScaler</span></span>
+      <span class="arr">→</span>
+      <span class="step">MLP 2–3 couches (ReLU, dropout)<span class="lib">PyTorch / Keras</span></span>
+      <span class="arr">→</span>
+      <span class="step">Prévision horaire J+1<span class="lib">pandas</span></span>
+      <span class="arr">→</span>
+      <span class="step">Optimisation achat / équilibrage réseau<span class="lib">PuLP · Pyomo</span></span>
+    </div>
+    <p class="note">Sur données purement tabulaires, comparer systématiquement au gradient boosting : le MLP ne gagne pas toujours.</p>
+  </div>
+</article>
+
+<!-- 8. CNN -->
+<article class="row deep">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="9" width="26" height="26" rx="2" fill="none" stroke="#0099A5" stroke-width="1.6"/>
+      <rect x="11" y="15" width="26" height="26" rx="2" fill="none" stroke="#ABC022" stroke-width="1.6"/>
+      <rect x="14" y="18" width="9" height="9" fill="#0099A5" opacity="0.35"/>
+      <path d="M40 28 h7" stroke="#5D848A" stroke-width="1.5"/><path d="M45 24.5 l4 3.5 l-4 3.5" fill="none" stroke="#5D848A" stroke-width="1.5"/>
+      <rect x="51" y="14" width="13" height="13" rx="2" fill="none" stroke="#00617E" stroke-width="1.5"/>
+      <rect x="55" y="18" width="13" height="13" rx="2" fill="none" stroke="#00617E" stroke-width="1.5"/>
+      <circle cx="61" cy="44" r="3" fill="#ABC022"/><circle cx="51" cy="44" r="3" fill="#97B8BB"/><circle cx="41" cy="44" r="3" fill="#97B8BB"/>
+    </svg>
+    <h3>CNN</h3>
+    <span class="alias">Convolutional Neural Networks</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-sup">Supervisé</span><span class="badge b-deep">Deep learning</span></div>
+    <p><b>Sous-classement :</b> convolutions = détection de motifs locaux invariants à la translation, hiérarchie de features (bords → textures → objets).</p>
+    <p><b>Tâches :</b> classification d'images, détection d'objets, segmentation ; aussi audio et séries (conv. 1D).</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Santé</b> — imagerie médicale : dépistage et aide au diagnostic en radiologie.</p>
+    <p><b>Industrie</b> — inspection visuelle automatisée en ligne de production.</p>
+    <p><b>Automobile</b> — perception pour l'aide à la conduite (ADAS).</p>
+    <p><b>Infrastructures / agriculture</b> — analyse d'images drone et satellite (fissures d'ouvrages, état des cultures).</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Inspection visuelle en ligne de production</p>
+    <div class="pipe">
+      <span class="step">Caméras haute cadence<span class="lib">OpenCV</span></span>
+      <span class="arr">→</span>
+      <span class="step">Prétraitement image<span class="lib">OpenCV · albumentations</span></span>
+      <span class="arr">→</span>
+      <span class="step">CNN fine-tuné (transfert ResNet / EfficientNet) ou YOLO<span class="lib">torchvision · ultralytics</span></span>
+      <span class="arr">→</span>
+      <span class="step">Rejet automatique + dashboard qualité<span class="lib">FastAPI · Streamlit</span></span>
+      <span class="arr">→</span>
+      <span class="step">Déploiement edge (GPU embarqué)<span class="lib">ONNX Runtime · TensorRT</span></span>
+    </div>
+    <p class="note">Le transfert learning divise le besoin en données annotées ; l'inférence en edge évite la latence réseau sur la ligne.</p>
+  </div>
+</article>
+
+<!-- 9. RNN -->
+<article class="row deep">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <path d="M36 6 a9 9 0 1 1 -9 9" fill="none" stroke="#ABC022" stroke-width="1.8"/>
+      <path d="M25 12 l2 5 l4 -4" fill="none" stroke="#ABC022" stroke-width="1.8"/>
+      <circle cx="36" cy="24" r="9" fill="#0099A5"/>
+      <g stroke="#5D848A" stroke-width="1.4">
+        <line x1="14" y1="46" x2="30" y2="32"/><line x1="36" y1="46" x2="36" y2="34"/><line x1="58" y1="46" x2="42" y2="32"/>
+      </g>
+      <rect x="9" y="45" width="10" height="8" rx="2" fill="#97B8BB"/>
+      <rect x="31" y="45" width="10" height="8" rx="2" fill="#97B8BB"/>
+      <rect x="53" y="45" width="10" height="8" rx="2" fill="#97B8BB"/>
+    </svg>
+    <h3>RNN / LSTM / GRU</h3>
+    <span class="alias">Réseaux récurrents à mémoire</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-sup">Supervisé</span><span class="badge b-deep">Deep learning</span></div>
+    <p><b>Sous-classement :</b> traitement séquentiel avec état interne ; portes LSTM/GRU contre l'oubli des dépendances longues.</p>
+    <p><b>Tâches :</b> séries temporelles, séquences. Supplantés par les Transformers en NLP, mais toujours compétitifs en séries temporelles et en embarqué (faible empreinte).</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Industrie</b> — durée de vie résiduelle (RUL) des équipements tournants.</p>
+    <p><b>Énergie / météo</b> — prévision court terme multi-signaux.</p>
+    <p><b>Embarqué</b> — détection de mots-clés vocaux (« wake words ») à faible consommation.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Maintenance prédictive (RUL) de turbines</p>
+    <div class="pipe">
+      <span class="step">Capteurs (vibration, T°, pression)<span class="lib">pandas</span></span>
+      <span class="arr">→</span>
+      <span class="step">Fenêtres glissantes<span class="lib">numpy</span></span>
+      <span class="arr">→</span>
+      <span class="step">LSTM empilées<span class="lib">PyTorch (nn.LSTM) / Keras</span></span>
+      <span class="arr">→</span>
+      <span class="step">Estimation de durée de vie restante<span class="lib">scikit-learn (métriques)</span></span>
+      <span class="arr">→</span>
+      <span class="step">Planification des interventions<span class="lib">pandas · requests (API GMAO)</span></span>
+    </div>
+    <p class="note">Le gain se mesure en coût d'arrêt évité : passer d'une maintenance calendaire à une maintenance conditionnelle.</p>
+  </div>
+</article>
+
+<!-- 10. Transformers -->
+<article class="row deep">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 44 C 18 16, 34 16, 40 44" fill="none" stroke="#0099A5" stroke-width="1.6"/>
+      <path d="M26 44 C 32 22, 36 22, 40 44" fill="none" stroke="#0099A5" stroke-width="1.2" opacity="0.55"/>
+      <path d="M40 44 C 46 20, 60 20, 66 44" fill="none" stroke="#ABC022" stroke-width="1.6"/>
+      <path d="M54 44 C 57 30, 62 30, 66 44" fill="none" stroke="#ABC022" stroke-width="1.2" opacity="0.55"/>
+      <g>
+        <rect x="8" y="45" width="9" height="8" rx="2" fill="#5D848A"/>
+        <rect x="22" y="45" width="9" height="8" rx="2" fill="#5D848A"/>
+        <rect x="36" y="45" width="9" height="8" rx="2" fill="#00617E"/>
+        <rect x="50" y="45" width="9" height="8" rx="2" fill="#5D848A"/>
+        <rect x="62" y="45" width="9" height="8" rx="2" fill="#5D848A"/>
+      </g>
+    </svg>
+    <h3>Transformers</h3>
+    <span class="alias">BERT · ViT · T5</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-self">Auto-supervisé</span><span class="badge b-deep">Deep learning</span></div>
+    <p><b>Sous-classement :</b> mécanisme d'attention — chaque élément « regarde » tout le contexte, calcul parallélisable ; pré-entraînement auto-supervisé massif puis fine-tuning supervisé.</p>
+    <p><b>Tâches :</b> compréhension du langage (BERT), vision (ViT), texte-à-texte (T5), multimodal.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Banque / juridique</b> — classification et extraction d'information dans les documents contractuels.</p>
+    <p><b>Santé</b> — structuration et codage de comptes rendus médicaux.</p>
+    <p><b>Retail</b> — recherche sémantique dans les catalogues.</p>
+    <p><b>Industrie</b> — ViT pour l'analyse d'imagerie technique.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Traitement intelligent de documents (IDP)</p>
+    <div class="pipe">
+      <span class="step">Scan / PDF entrants<span class="lib">PyMuPDF · pdf2image</span></span>
+      <span class="arr">→</span>
+      <span class="step">OCR<span class="lib">pytesseract · PaddleOCR</span></span>
+      <span class="arr">→</span>
+      <span class="step">LayoutLM / BERT fine-tuné<span class="lib">Hugging Face transformers</span></span>
+      <span class="arr">→</span>
+      <span class="step">Extraction d'entités (montants, dates, clauses)<span class="lib">transformers (NER) · spaCy</span></span>
+      <span class="arr">→</span>
+      <span class="step">Validation humaine ciblée<span class="lib">Label Studio</span></span>
+      <span class="arr">→</span>
+      <span class="step">Intégration ERP / GED<span class="lib">requests (API)</span></span>
+    </div>
+    <p class="note">La validation humaine ne porte que sur les extractions à faible confiance : c'est ce qui rend le ROI positif à volume élevé.</p>
+  </div>
+</article>
+
+<h2 class="group">04 · IA générative &amp; systèmes LLM <span class="n">créer du contenu et orchestrer des workflows autour de modèles de fondation</span></h2>
+
+<!-- 11. LLM -->
+<article class="row gen">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="40" width="48" height="8" rx="3" fill="#00617E"/>
+      <rect x="17" y="30" width="38" height="8" rx="3" fill="#0099A5"/>
+      <rect x="22" y="20" width="28" height="8" rx="3" fill="#75A0D2"/>
+      <rect x="27" y="10" width="18" height="8" rx="3" fill="#ABC022"/>
+      <path d="M59 8 l1.6 4 l4 1.6 l-4 1.6 l-1.6 4 l-1.6 -4 l-4 -1.6 l4 -1.6 z" fill="#FDC603"/>
+    </svg>
+    <h3>LLM</h3>
+    <span class="alias">Large Language Models (type GPT, Claude)</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-gen">Génératif</span><span class="badge b-self">Auto-supervisé</span><span class="badge b-deep">Deep learning</span></div>
+    <p><b>Sous-classement :</b> Transformer décodeur auto-régressif (prédiction du token suivant), pré-entraînement massif + alignement (RLHF).</p>
+    <p><b>Tâches :</b> rédaction, synthèse, traduction, code, dialogue, raisonnement — en zero/few-shot, sans réentraînement.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Transverse</b> — assistants métiers et productivité des fonctions support.</p>
+    <p><b>IT</b> — copilotes de code (génération, revue, tests).</p>
+    <p><b>Service client</b> — rédaction assistée et automatisation des réponses.</p>
+    <p><b>Marketing / ventes</b> — génération de contenus, fonction n°1 en usage régulier.</p>
+    <span class="stat">McKinsey 2025 : 88 % des organisations utilisent l'IA, 79 % la GenAI — mais ~7 % seulement l'ont déployée à l'échelle de toute l'entreprise.</span>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Copilote de service client</p>
+    <div class="pipe">
+      <span class="step">Requête + historique client<span class="lib">requests (API CRM)</span></span>
+      <span class="arr">→</span>
+      <span class="step">LLM (prompt système + garde-fous PII)<span class="lib">SDK anthropic / openai · presidio</span></span>
+      <span class="arr">→</span>
+      <span class="step">Réponse suggérée<span class="lib">LangChain (orchestration)</span></span>
+      <span class="arr">→</span>
+      <span class="step">Validation par le conseiller<span class="lib">Streamlit</span></span>
+      <span class="arr">→</span>
+      <span class="step">Boucle de feedback<span class="lib">LangSmith · MLflow</span></span>
+      <span class="arr">→</span>
+      <span class="step">Amélioration continue des prompts<span class="lib">deepeval (évaluations)</span></span>
+    </div>
+    <p class="note">Le « human-in-the-loop » sécurise le déploiement initial ; l'automatisation complète ne vient qu'après mesure de la qualité.</p>
+  </div>
+</article>
+
+<!-- 12. RAG -->
+<article class="row sys">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 16 a8 4 0 0 1 16 0 v22 a8 4 0 0 1 -16 0 z" fill="#00617E"/>
+      <ellipse cx="14" cy="16" rx="8" ry="4" fill="#0099A5"/>
+      <path d="M24 28 h6" stroke="#5D848A" stroke-width="1.5"/><path d="M28 24.5 l4 3.5 l-4 3.5" fill="none" stroke="#5D848A" stroke-width="1.5"/>
+      <rect x="34" y="19" width="18" height="18" rx="3" fill="#0099A5"/>
+      <path d="M54 28 h4" stroke="#5D848A" stroke-width="1.5"/><path d="M56 24.5 l4 3.5 l-4 3.5" fill="none" stroke="#5D848A" stroke-width="1.5"/>
+      <rect x="61" y="16" width="9" height="24" rx="1.5" fill="none" stroke="#ABC022" stroke-width="1.6"/>
+      <line x1="63" y1="22" x2="68" y2="22" stroke="#ABC022" stroke-width="1.3"/>
+      <line x1="63" y1="27" x2="68" y2="27" stroke="#ABC022" stroke-width="1.3"/>
+      <line x1="63" y1="32" x2="68" y2="32" stroke="#ABC022" stroke-width="1.3"/>
+    </svg>
+    <h3>RAG</h3>
+    <span class="alias">Retrieval-Augmented Generation</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-sys">Système LLM</span></div>
+    <p><b>Sous-classement :</b> architecture hybride — recherche documentaire (embeddings + base vectorielle) couplée à la génération LLM.</p>
+    <p><b>Problèmes types :</b> ancrer les réponses sur les documents de l'entreprise, réduire les hallucinations, garder la connaissance à jour sans réentraîner le modèle, citer les sources.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Tous secteurs</b> — assistant de connaissance interne : procédures, politiques, documentation.</p>
+    <p><b>Ingénierie / construction</b> — questions-réponses sur normes, référentiels techniques et retours d'expérience projets.</p>
+    <p><b>Juridique</b> — recherche dans la jurisprudence et les contrats.</p>
+    <p><b>Support client</b> — self-service fiable sur base de connaissances.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Assistant documentaire d'entreprise</p>
+    <div class="pipe">
+      <span class="step">Ingestion (GED, wiki, normes)<span class="lib">unstructured · LlamaIndex</span></span>
+      <span class="arr">→</span>
+      <span class="step">Chunking + embeddings<span class="lib">LangChain splitters · sentence-transformers</span></span>
+      <span class="arr">→</span>
+      <span class="step">Base vectorielle<span class="lib">qdrant-client · chromadb · FAISS</span></span>
+      <span class="arr">→</span>
+      <span class="step">Recherche hybride (dense + BM25) + re-ranking<span class="lib">rank_bm25 · cross-encoder (sentence-transformers)</span></span>
+      <span class="arr">→</span>
+      <span class="step">LLM avec contexte<span class="lib">SDK anthropic / openai</span></span>
+      <span class="arr">→</span>
+      <span class="step">Réponse sourcée + citations<span class="lib">ragas (évaluation)</span></span>
+    </div>
+    <p class="note">La qualité se joue dans la recherche (chunking, re-ranking, droits d'accès) bien plus que dans le choix du LLM.</p>
+  </div>
+</article>
+
+<!-- 13. Agents IA -->
+<article class="row sys">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="36" cy="28" r="9" fill="#0099A5"/>
+      <path d="M36 10 a18 18 0 0 1 17 12" fill="none" stroke="#ABC022" stroke-width="1.7"/>
+      <path d="M53 22 l0.5 5 l-5 -1" fill="none" stroke="#ABC022" stroke-width="1.7"/>
+      <path d="M53 34 a18 18 0 0 1 -30 6" fill="none" stroke="#ABC022" stroke-width="1.7"/>
+      <path d="M23 40 l0 -5 l5 1.5" fill="none" stroke="#ABC022" stroke-width="1.7"/>
+      <path d="M20 33 a18 18 0 0 1 8 -21" fill="none" stroke="#ABC022" stroke-width="1.7"/>
+      <path d="M28 12 l5 -0.5 l-1.5 5" fill="none" stroke="#ABC022" stroke-width="1.7"/>
+      <rect x="58" y="6" width="11" height="11" rx="2" fill="#00617E"/>
+      <rect x="58" y="40" width="11" height="11" rx="2" fill="#75A0D2"/>
+      <rect x="3" y="40" width="11" height="11" rx="2" fill="#FDC603"/>
+    </svg>
+    <h3>Agents IA</h3>
+    <span class="alias">Agentic AI · workflows multi-étapes</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-sys">Système LLM</span></div>
+    <p><b>Sous-classement :</b> LLM + planification + appel d'outils (function calling, MCP) + mémoire ; boucle raisonner → agir → observer, orchestration mono ou multi-agents.</p>
+    <p><b>Problèmes types :</b> automatiser des processus multi-étapes de bout en bout, là où un chatbot reste passif et mono-tour.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>IT / développement</b> — agents de codage bout-en-bout (fonction la plus mature).</p>
+    <p><b>Assurance</b> — instruction automatisée des sinistres.</p>
+    <p><b>Service client</b> — résolution autonome des demandes courantes.</p>
+    <p><b>Supply chain</b> — orchestration multi-agents (prévision, stocks, logistique).</p>
+    <span class="stat">Gartner : 40 % des applications d'entreprise intégreront des agents fin 2026 (&lt;5 % en 2025) ; mais &gt;40 % des projets agentiques annulés d'ici fin 2027 (ROI flou, coûts).</span>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Agent de codage autonome — du ticket à la merge request</p>
+    <div class="pipe">
+      <span class="step">Ticket / issue assigné (bug, test, refactoring)<span class="lib">python-gitlab · FastAPI (webhook)</span></span>
+      <span class="arr">→</span>
+      <span class="step">Planification par l'agent : comprendre → localiser → modifier<span class="lib">LangGraph · SDK anthropic (tool use)</span></span>
+      <span class="arr">→</span>
+      <span class="step">Outils : lecture du repo · édition · exécution des tests · terminal<span class="lib">GitPython · pytest · subprocess</span></span>
+      <span class="arr">→</span>
+      <span class="step">Boucle coder / exécuter / corriger en sandbox isolée<span class="lib">docker (SDK) · LangGraph</span></span>
+      <span class="arr">→</span>
+      <span class="step">Merge request + revue humaine obligatoire<span class="lib">python-gitlab</span></span>
+      <span class="arr">→</span>
+      <span class="step">Observabilité &amp; journal d'audit<span class="lib">LangSmith · OpenTelemetry</span></span>
+    </div>
+    <p class="note">Le développeur reste le garde-fou : l'agent itère en sandbox jusqu'aux tests verts, mais rien n'est fusionné sans revue humaine — le KPI clé est le taux de MR acceptées sans reprise.</p>
+  </div>
+</article>
+
+<!-- 14. GANs / Diffusion -->
+<article class="row gen">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <g fill="#97B8BB">
+        <circle cx="7" cy="14" r="1.7"/><circle cx="14" cy="22" r="1.7"/><circle cx="9" cy="32" r="1.7"/><circle cx="19" cy="12" r="1.7"/>
+        <circle cx="22" cy="30" r="1.7"/><circle cx="12" cy="42" r="1.7"/><circle cx="24" cy="42" r="1.7"/><circle cx="17" cy="34" r="1.7"/>
+      </g>
+      <path d="M28 28 h8" stroke="#5D848A" stroke-width="1.5"/><path d="M34 24.5 l4 3.5 l-4 3.5" fill="none" stroke="#5D848A" stroke-width="1.5"/>
+      <rect x="42" y="12" width="26" height="30" rx="3" fill="none" stroke="#00617E" stroke-width="1.6"/>
+      <circle cx="50" cy="21" r="3" fill="#FDC603"/>
+      <path d="M44 38 l7 -10 l5 6 l4 -5 l6 9 z" fill="#ABC022"/>
+    </svg>
+    <h3>Modèles génératifs visuels</h3>
+    <span class="alias">GANs · Diffusion models</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-gen">Génératif</span><span class="badge b-deep">Deep learning</span></div>
+    <p><b>Sous-classement :</b> GAN = générateur vs discriminateur en compétition ; diffusion = débruitage itératif, état de l'art actuel de la génération d'images.</p>
+    <p><b>Tâches :</b> génération d'images/vidéo, super-résolution, inpainting, données synthétiques.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Média / publicité</b> — création et déclinaison de visuels par diffusion.</p>
+    <p><b>Industrie</b> — données synthétiques de défauts rares pour entraîner la vision.</p>
+    <p><b>Pharma</b> — génération de molécules candidates.</p>
+    <p><b>Architecture / design</b> — exploration rapide de concepts visuels.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Données synthétiques pour l'inspection qualité</p>
+    <div class="pipe">
+      <span class="step">Peu d'images de défauts réels<span class="lib">Pillow · OpenCV</span></span>
+      <span class="arr">→</span>
+      <span class="step">Fine-tuning d'un modèle de diffusion (LoRA)<span class="lib">diffusers · peft</span></span>
+      <span class="arr">→</span>
+      <span class="step">Génération de défauts synthétiques variés<span class="lib">diffusers</span></span>
+      <span class="arr">→</span>
+      <span class="step">Augmentation du dataset<span class="lib">albumentations</span></span>
+      <span class="arr">→</span>
+      <span class="step">Entraînement du CNN d'inspection<span class="lib">torchvision · ultralytics</span></span>
+    </div>
+    <p class="note">Résout le problème n°1 de la vision industrielle : les défauts graves sont rares, donc sous-représentés dans les données réelles.</p>
+  </div>
+</article>
+
+<h2 class="group">05 · Apprentissage par renforcement <span class="n">apprendre une politique d'action optimale par essai-erreur et récompense</span></h2>
+
+<!-- 15. RL -->
+<article class="row rl">
+  <div class="c c1">
+    <svg viewBox="0 0 72 56" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="6" width="27" height="15" rx="3" fill="#0099A5"/>
+      <rect x="39" y="35" width="27" height="15" rx="3" fill="#00617E"/>
+      <path d="M35 15 C 50 15, 52 22, 52 32" fill="none" stroke="#F75226" stroke-width="1.8"/>
+      <path d="M48.5 28 l3.5 5 l4 -4.5" fill="none" stroke="#F75226" stroke-width="1.8"/>
+      <path d="M37 41 C 22 41, 20 34, 20 24" fill="none" stroke="#ABC022" stroke-width="1.8"/>
+      <path d="M23.5 28 l-3.5 -5 l-4 4.5" fill="none" stroke="#ABC022" stroke-width="1.8"/>
+    </svg>
+    <h3>Reinforcement Learning</h3>
+    <span class="alias">RL · bandits · policy optimization (PPO)</span>
+  </div>
+  <div class="c c2" data-l="Problèmes &amp; type de ML">
+    <div class="badges"><span class="badge b-rl">Renforcement</span></div>
+    <p><b>Sous-classement :</b> agent / environnement / récompense ; bandits multi-bras (exploration-exploitation), optimisation de politique (PPO) ; RLHF pour l'alignement des LLM.</p>
+    <p><b>Problèmes types :</b> décision séquentielle sous incertitude, optimisation quand il n'existe pas de « bonne réponse » étiquetée mais un objectif mesurable.</p>
+  </div>
+  <div class="c c3" data-l="Business cases par industrie">
+    <p><b>Énergie / datacenters</b> — optimisation du refroidissement et de la consommation.</p>
+    <p><b>Logistique</b> — routage dynamique et pilotage d'entrepôts.</p>
+    <p><b>Marketing</b> — bandits pour l'allocation en continu des créas et offres.</p>
+    <p><b>Robotique industrielle</b> — manipulation, pick-and-place et assemblage (cobots type Universal Robots UR5).</p>
+    <p><b>Finance</b> — exécution optimale d'ordres.</p>
+  </div>
+  <div class="c c4" data-l="Architecture type">
+    <p class="case-title">Pick-and-place robotisé — bras Universal Robots UR5</p>
+    <div class="pipe">
+      <span class="step">Jumeau numérique du bras UR5 (environnement simulé)<span class="lib">PyBullet / MuJoCo · Gymnasium</span></span>
+      <span class="arr">→</span>
+      <span class="step">Entraînement de la politique (PPO / SAC) + randomisation de domaine<span class="lib">Stable-Baselines3 · Ray RLlib</span></span>
+      <span class="arr">→</span>
+      <span class="step">Perception caméra RGB-D : détection &amp; pose des pièces<span class="lib">OpenCV · PyTorch</span></span>
+      <span class="arr">→</span>
+      <span class="step">Transfert sim-to-real (calibration, vitesses réduites)<span class="lib">ur-rtde · rclpy (ROS 2)</span></span>
+      <span class="arr">→</span>
+      <span class="step">Contrôle temps réel du bras (interface RTDE, 500 Hz)<span class="lib">ur-rtde</span></span>
+      <span class="arr">→</span>
+      <span class="step">Supervision sécurité (force, zones) &amp; métriques de prise<span class="lib">pandas · OpenTelemetry</span></span>
+    </div>
+    <p class="note">Politique apprise à 100 % en simulation puis transférée : on ne laisse jamais un agent RL explorer librement un bras réel ; les limites de force natives du cobot UR5 restent le filet de sécurité ultime.</p>
+  </div>
+</article>
+
+</main>
+
+<footer>
+  <div class="inner">
+    <h4>Sources &amp; notes méthodologiques</h4>
+    <p><b style="color:#fff">Gartner</b> — communiqués officiels : 40 % des applications d'entreprise intégreront des agents IA spécialisés fin 2026 (contre &lt;5 % en 2025) ; 33 % des logiciels d'entreprise incluront de l'agentic AI d'ici 2028 (contre &lt;1 % en 2024) ; plus de 40 % des projets agentiques annulés d'ici fin 2027 (coûts, valeur métier floue, contrôle des risques insuffisant).</p>
+    <p><b style="color:#fff">McKinsey — The State of AI 2025</b> (enquête mondiale, 1 993 organisations, 105 pays) : 88 % des organisations utilisent l'IA dans au moins une fonction, 79 % la GenAI ; 23 % passent à l'échelle un système agentique et 39 % expérimentent ; environ 7 % seulement ont déployé l'IA à l'échelle de toute l'entreprise.</p>
+    <p style="margin-top:14px;font-style:italic">Grille de référence à visée pédagogique et de cadrage : les architectures présentées sont des patrons génériques éprouvés, à adapter au contexte (données, contraintes réglementaires, criticité). Les bibliothèques Python indiquées sont les standards open source dominants de chaque composant (écosystème PyData, scikit-learn, PyTorch, Hugging Face, LangChain) ; des équivalents existent selon la plateforme cible. Juillet 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/animations.js"></script>
+</body>
+</html>

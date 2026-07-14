@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas IA & ML — Fiches architectures Métier × Technique</title>
+<meta name="description" content="16 fiches d'architectures IA / ML : objectif business, KPI de succès, composants techniques et bibliothèques Python, avec la perspective DevOps / MLOps / LLMOps.">
+<link rel="stylesheet" href="assets/css/theme.css">
+<link rel="stylesheet" href="assets/css/fiches.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="brand" href="index.html">Atlas <span>IA·ML</span></a>
+  <div class="navlinks">
+    <a href="index.html" class="navbtn">Grille comparative</a>
+    <a href="fiches.html" class="navbtn active">Fiches Métier × Technique</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="inner">
+    <p class="kicker">Atlas IA &amp; ML — Référentiel technique · Volet 2</p>
+    <h1>Fiches architectures — lecture Métier × Technique</h1>
+    <p class="sub">Pour chacune des 16 architectures de la grille comparative : une double lecture destinée aux parties prenantes, rédigée dans une perspective DevOps / MLOps / LLMOps. Côté métier : l'objectif business et les KPI de succès mesurables. Côté technique : chaque composant, ses bibliothèques Python et son rôle précis dans l'atteinte du résultat attendu, complétés par le mode d'exploitation en production.</p>
+  </div>
+</header>
+
+<main>
+<h2 class="group">01 · ML classique supervisé</h2>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">01 · Régression (linéaire / logistique)</span>
+      <h3>Scorecard de probabilité de défaut (PD) — risque de crédit</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Fiabiliser et rendre auditable la décision d'octroi de crédit en estimant la probabilité de défaut (PD) de chaque emprunteur, en conformité Bâle / IFRS 9, afin de réduire le coût du risque sans dégrader le taux d'acceptation.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Pouvoir discriminant : Gini / AUC au-dessus de la cible interne, stable en backtesting trimestriel</li><li>Calibration : taux de défaut observé par classe de score conforme à la PD prédite</li><li>Coût du risque (provisions) en baisse à taux d'acceptation constant</li><li>Zéro réserve d'audit du régulateur sur la documentation du modèle</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Historique prêts et défauts</td><td class="cl">pandas · SQLAlchemy</td><td>Extraction fiable des dossiers et de la cible « défaut à 12 mois » ; la qualité des données plafonne la performance du modèle.</td></tr><tr><td class="cc">Discrétisation WoE / IV</td><td class="cl">optbinning</td><td>Transforme chaque variable en classes monotones et lisibles : robustesse statistique et interprétabilité exigées par le régulateur.</td></tr><tr><td class="cc">Régression logistique</td><td class="cl">statsmodels · sklearn LogisticRegression</td><td>Produit la PD avec des coefficients auditables ; statsmodels fournit tests et intervalles de confiance pour le dossier de validation.</td></tr><tr><td class="cc">Points de score (PDO)</td><td class="cl">numpy</td><td>Convertit la PD en score lisible par les conseillers : rend la décision opérationnelle en agence.</td></tr><tr><td class="cc">Backtesting et calibration</td><td class="cl">sklearn.metrics · scipy.stats</td><td>Mesure AUC / Gini / KS et la calibration dans le temps ; déclenche la revue du modèle en cas de dérive.</td></tr><tr><td class="cc">API de décision</td><td class="cl">FastAPI</td><td>Expose le score au système d'octroi en temps réel, avec journalisation réglementaire de chaque décision.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Cycle MLOps « bancaire » à forte gouvernance : versionnage modèle + données (MLflow), backtesting trimestriel automatisé, revalidation annuelle par une équipe de validation indépendante.</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">02 · Arbre de décision (CART)</span>
+      <h3>Scoring crédit explicable — banque de détail</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Garantir que chaque décision d'octroi est exprimable en règles si/alors compréhensibles par un conseiller et opposables au client (motif de refus RGPD / AI Act), tout en servant de référence explicable face aux modèles plus complexes.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>100 % des refus assortis d'un motif restituable au client</li><li>Performance ≥ 95 % de celle du modèle champion (précision / rappel)</li><li>Temps de décision &lt; 1 s par demande</li><li>Baisse des contestations et réclamations clients</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Données client et historique</td><td class="cl">pandas · SQLAlchemy</td><td>Socle du dispositif : extraction fiable des dossiers et de la cible.</td></tr><tr><td class="cc">Variables métier</td><td class="cl">sklearn ColumnTransformer</td><td>Prépare les variables de façon reproductible : le même pipeline s'exécute à l'identique en entraînement et en production.</td></tr><tr><td class="cc">CART (profondeur limitée, élagage)</td><td class="cl">sklearn DecisionTreeClassifier</td><td>Apprend l'arbre ; la profondeur limitée est un choix métier — moins de niveaux, des règles lisibles et généralisables.</td></tr><tr><td class="cc">Règles si/alors</td><td class="cl">sklearn export_text · dtreeviz</td><td>Matérialise le modèle en règles et visuels validables par la conformité et le métier avant mise en production.</td></tr><tr><td class="cc">Décision + motif restitué</td><td class="cl">FastAPI</td><td>Applique les règles en temps réel et restitue le motif exact : le composant qui rend la conformité opérationnelle.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Pipeline sérialisé et versionné, tests de non-régression sur dossiers de référence à chaque réentraînement, revue conformité systématique avant tout déploiement.</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">03 · Random Forest / Gradient Boosting</span>
+      <h3>Détection de fraude en quasi temps réel — paiements</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Bloquer la fraude au paiement en moins de 100 ms tout en préservant l'expérience des bons clients : chaque faux positif est une vente perdue et un client irrité.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Montant de fraude évitée (€ / mois)</li><li>Rappel élevé (&gt; 80 %) à taux de faux positifs contraint (≤ 0,5 %)</li><li>Latence p99 &lt; 100 ms sur le flux de paiement</li><li>Volume de la file analystes maîtrisé (alertes qualifiées)</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Flux de transactions</td><td class="cl">confluent-kafka</td><td>Capte chaque transaction en continu : le streaming garantit qu'aucun paiement ne contourne le contrôle.</td></tr><tr><td class="cc">Feature store</td><td class="cl">Feast</td><td>Sert les agrégats glissants (1 h / 24 h / 30 j) identiques en entraînement et en ligne : la cohérence online/offline évite l'écart de performance en production.</td></tr><tr><td class="cc">Modèle de score</td><td class="cl">xgboost · scikit-learn</td><td>Produit le score de risque ; le boosting capte les combinaisons subtiles (montant × pays × heure × historique) typiques de la fraude.</td></tr><tr><td class="cc">Seuils + règles métier</td><td class="cl">numpy</td><td>Traduit le score en décision (accepter, bloquer, vérifier), ajustable par le métier sans redéployer le modèle.</td></tr><tr><td class="cc">Blocage / file analystes</td><td class="cl">shap · FastAPI</td><td>SHAP explique chaque alerte et accélère l'investigation ; FastAPI intègre la décision au parcours de paiement.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Surveillance du drift (Evidently), réentraînement programmé et déploiement champion-challenger (MLflow) : la fraude s'adapte en permanence, le dispositif aussi.</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">04 · SVM / SVR</span>
+      <h3>Contrôle qualité sur signaux capteurs — usine</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Automatiser le contrôle qualité sur signaux capteurs pour rebuter les pièces défectueuses au plus tôt et tracer les lots, avec très peu d'exemples de défauts disponibles.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Taux de défauts échappés (ppm) en baisse</li><li>Taux de faux rejets sous le seuil de coût rebut accepté</li><li>Détection tenue dans le temps de cycle de la ligne</li><li>Délai de qualification d'une nouvelle référence produit réduit</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Signal vibratoire machine</td><td class="cl">numpy</td><td>Acquisition et mise en forme du signal brut.</td></tr><tr><td class="cc">Descripteurs du signal</td><td class="cl">scipy.signal · tsfresh</td><td>Transforme le signal en caractéristiques discriminantes (spectre, statistiques) : l'étape qui porte l'essentiel de la performance.</td></tr><tr><td class="cc">Classifieur à marge maximale</td><td class="cl">sklearn SVC (RBF)</td><td>Trace une frontière robuste entre conforme et défaut, efficace même avec peu d'échantillons de défauts.</td></tr><tr><td class="cc">Modèle sérialisé</td><td class="cl">joblib</td><td>Fige la version qualifiée du modèle : exigence de traçabilité qualité (quel modèle a contrôlé quel lot).</td></tr><tr><td class="cc">Alerte + traçabilité lot</td><td class="cl">paho-mqtt · FastAPI</td><td>Diffuse l'alerte vers la ligne et inscrit le verdict dans le système qualité (MES).</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Requalification du modèle à chaque changement de gamme ou d'outillage ; suivi continu de la distribution des scores pour détecter la dérive des capteurs.</p>
+</section>
+<h2 class="group">02 · ML non supervisé</h2>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">05 · Clustering</span>
+      <h3>Segmentation client pour l'activation marketing</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Passer d'un marketing de masse à des campagnes ciblées par segments actionnables, pour augmenter conversion et rétention à budget constant.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Uplift de conversion des campagnes segmentées vs groupe de contrôle</li><li>Revenu par envoi / par session en hausse</li><li>Churn des segments à risque en baisse après actions dédiées</li><li>Adoption réelle des personas par les équipes marketing</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Vue 360° client</td><td class="cl">pandas.read_sql · SQLAlchemy</td><td>Consolide les données clients : la matière première des segments.</td></tr><tr><td class="cc">Features RFM + comportement</td><td class="cl">pandas</td><td>Traduit le comportement en variables métier (récence, fréquence, montant) compréhensibles par le marketing.</td></tr><tr><td class="cc">Standardisation + PCA</td><td class="cl">sklearn</td><td>Met les variables à la même échelle et réduit le bruit pour obtenir des segments stables.</td></tr><tr><td class="cc">K-means + silhouette</td><td class="cl">sklearn KMeans · silhouette_score</td><td>Forme les segments et objective le choix de leur nombre : évite les découpages arbitraires.</td></tr><tr><td class="cc">Profilage des personas</td><td class="cl">seaborn</td><td>Rend chaque segment lisible pour le nommer et le partager avec le métier.</td></tr><tr><td class="cc">Activation CRM</td><td class="cl">requests (API CRM)</td><td>Pousse les segments dans l'outil de campagne : sans activation, la segmentation ne produit aucune valeur.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Recalcul mensuel, suivi de la stabilité des segments (taux de migration inter-segments) et mesure systématique par groupes de contrôle.</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">06 · Règles d'association / Recommandation</span>
+      <h3>Moteur de recommandation e-commerce</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Augmenter le panier moyen et le revenu par session grâce à des recommandations pertinentes servies en temps réel sur le site.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Uplift A/B sur revenu par session et panier moyen</li><li>Taux de clic (CTR) des blocs de recommandation</li><li>Couverture du catalogue (part des produits effectivement recommandés)</li><li>Latence p99 &lt; 100 ms</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Logs d'événements</td><td class="cl">PySpark</td><td>Traite les volumes massifs de vues, paniers et achats qui alimentent les modèles.</td></tr><tr><td class="cc">Associations</td><td class="cl">mlxtend · pyspark.ml.fpm</td><td>Extrait les règles « achetés ensemble » : simples, robustes, immédiatement exploitables.</td></tr><tr><td class="cc">Filtrage collaboratif</td><td class="cl">implicit (ALS)</td><td>Apprend les préférences implicites de chaque client par factorisation de matrices : la personnalisation.</td></tr><tr><td class="cc">Ranking hybride</td><td class="cl">LightGBM (learning-to-rank)</td><td>Fusionne les candidats des deux approches et les ordonne selon la probabilité d'achat.</td></tr><tr><td class="cc">API temps réel</td><td class="cl">FastAPI · redis-py</td><td>Sert les recommandations en moins de 100 ms grâce au pré-calcul et au cache : la latence conditionne le CTR.</td></tr><tr><td class="cc">Mesure d'uplift</td><td class="cl">scipy.stats · statsmodels</td><td>Prouve la valeur en A/B test réel : la seule mesure qui compte.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Réentraînement quotidien, expérimentation A/B permanente et garde-fous éditoriaux (diversité, exclusions produits).</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">07 · Réduction de dimension / Autoencodeurs</span>
+      <h3>Détection d'anomalies IoT industriel</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Détecter au plus tôt tout comportement anormal des équipements sans disposer d'un historique de pannes étiqueté, afin de réduire les arrêts non planifiés.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Nombre d'arrêts non planifiés évités par an</li><li>Préavis moyen de détection avant incident (heures)</li><li>Taux de fausses alertes maîtrisé</li><li>MTTR en baisse (diagnostic orienté par le signal fautif)</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Séries multi-capteurs</td><td class="cl">influxdb-client · pandas</td><td>Collecte et historise les mesures des équipements.</td></tr><tr><td class="cc">Fenêtrage + normalisation</td><td class="cl">numpy · sklearn</td><td>Rend les signaux comparables dans le temps et entre machines.</td></tr><tr><td class="cc">Autoencodeur</td><td class="cl">PyTorch / Keras</td><td>Apprend à reconstruire uniquement le fonctionnement normal : la référence de normalité du système.</td></tr><tr><td class="cc">Erreur de reconstruction</td><td class="cl">numpy (MSE)</td><td>Mesure l'écart à la normale : plus la reconstruction est mauvaise, plus le comportement est suspect.</td></tr><tr><td class="cc">Seuil adaptatif</td><td class="cl">scipy.stats</td><td>Ajuste la sensibilité selon le régime de fonctionnement pour limiter les fausses alertes.</td></tr><tr><td class="cc">Alerte maintenance</td><td class="cl">paho-mqtt</td><td>Notifie la maintenance en temps réel avec le contexte du signal en cause.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Réapprentissage après chaque maintenance majeure (le « normal » change) ; le taux d'alertes est lui-même suivi comme indicateur de santé du dispositif.</p>
+</section>
+<h2 class="group">03 · Deep learning</h2>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">08 · Réseaux neuronaux denses (MLP)</span>
+      <h3>Prévision de consommation électrique J+1</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Fiabiliser la prévision de consommation à J+1 pour optimiser les achats d'énergie et l'équilibrage du réseau, et réduire les pénalités d'écart.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>MAPE de prévision sous la cible (ex. &lt; 3 % vs réalisé)</li><li>Coût des écarts (€ / MWh) en baisse</li><li>Gain mesuré vs méthode de référence (persistance / modèle statistique)</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Consolidation des données</td><td class="cl">pandas · requests (API météo)</td><td>Assemble historique, météo et calendrier : les régresseurs exogènes font l'essentiel de la précision.</td></tr><tr><td class="cc">Normalisation</td><td class="cl">sklearn StandardScaler</td><td>Stabilise l'apprentissage du réseau.</td></tr><tr><td class="cc">MLP 2–3 couches</td><td class="cl">PyTorch / Keras</td><td>Capture les non-linéarités (météo × heure × type de jour) hors de portée d'un modèle linéaire.</td></tr><tr><td class="cc">Prévision horaire</td><td class="cl">pandas</td><td>Met la prévision au format attendu par les processus d'achat et d'équilibrage.</td></tr><tr><td class="cc">Optimisation de la décision</td><td class="cl">PuLP · Pyomo</td><td>Transforme la prévision en plan d'achat optimal : c'est la décision, pas la prévision, qui crée la valeur.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Réentraînement glissant, backtesting continu prévision vs réalisé, alerte automatique en cas de dérive (nouveaux usages, météo atypique).</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">09 · CNN</span>
+      <h3>Inspection visuelle en ligne de production</h3>
+    </div>
+    <span class="ops">MLOps · Edge</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Automatiser l'inspection qualité en ligne de production pour réduire les défauts échappés et le coût du contrôle manuel, à cadence industrielle.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Taux de défauts échappés (ppm) en baisse</li><li>Taux de faux rejets sous le coût rebut cible</li><li>Cadence tenue : inférence sous le temps de cycle</li><li>Coût qualité global en baisse</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Acquisition caméras</td><td class="cl">OpenCV</td><td>Acquiert et normalise les images à haute cadence.</td></tr><tr><td class="cc">Prétraitement + augmentation</td><td class="cl">OpenCV · albumentations</td><td>L'augmentation rend le modèle robuste aux variations réelles : éclairage, position, salissures.</td></tr><tr><td class="cc">Détection / classification</td><td class="cl">torchvision · ultralytics (YOLO)</td><td>Détecte et classe les défauts ; le transfert learning divise le besoin d'images annotées.</td></tr><tr><td class="cc">Rejet + dashboard qualité</td><td class="cl">FastAPI · Streamlit</td><td>Intègre la décision à l'automate et donne à la qualité une supervision en continu.</td></tr><tr><td class="cc">Optimisation edge</td><td class="cl">ONNX Runtime · TensorRT</td><td>Compresse et accélère le modèle pour tenir la cadence sur GPU embarqué, sans dépendre du réseau.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps · Edge) :</b> Boucle d'amélioration continue : les cas à faible confiance sont réannotés et réinjectés (active learning) ; chaque version est validée hors ligne avant déploiement edge.</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">10 · RNN / LSTM / GRU</span>
+      <h3>Maintenance prédictive (RUL) de turbines</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Passer d'une maintenance calendaire à une maintenance conditionnelle en anticipant la fin de vie des composants critiques.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Coût de maintenance en baisse (interventions inutiles évitées)</li><li>Arrêts non planifiés en baisse</li><li>Erreur d'estimation de la RUL (MAE en heures / cycles) sous la cible</li><li>Disponibilité des équipements en hausse</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Historisation capteurs</td><td class="cl">pandas</td><td>Rassemble les signaux de dégradation : vibration, température, pression.</td></tr><tr><td class="cc">Fenêtres glissantes</td><td class="cl">numpy</td><td>Construit les séquences temporelles que le réseau apprend.</td></tr><tr><td class="cc">LSTM empilées</td><td class="cl">PyTorch (nn.LSTM)</td><td>Apprend la trajectoire de dégradation et projette la durée de vie restante.</td></tr><tr><td class="cc">Validation des métriques</td><td class="cl">scikit-learn</td><td>Contrôle l'erreur d'estimation avant toute décision opérationnelle.</td></tr><tr><td class="cc">Planification GMAO</td><td class="cl">pandas · requests (API GMAO)</td><td>Convertit la prédiction en ordre de travail planifié : le point de contact avec la valeur.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Un modèle par famille d'équipements, recalibration après chaque remplacement de composant, suivi de la distribution des prédictions pour détecter les dérives.</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">11 · Transformers (BERT, ViT, T5)</span>
+      <h3>Traitement intelligent de documents (IDP)</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Automatiser l'extraction des données des documents entrants (factures, contrats, formulaires) pour réduire délais, coûts de saisie et erreurs.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Taux de traitement « straight-through » (sans intervention humaine)</li><li>Précision d'extraction &gt; 98 % sur les champs critiques</li><li>Délai de traitement : de plusieurs jours à quelques minutes</li><li>Coût par document en baisse</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Normalisation des entrées</td><td class="cl">PyMuPDF · pdf2image</td><td>Convertit les formats hétérogènes en entrées exploitables.</td></tr><tr><td class="cc">OCR</td><td class="cl">pytesseract · PaddleOCR</td><td>Transforme l'image en texte positionné : la matière première du modèle.</td></tr><tr><td class="cc">Compréhension document</td><td class="cl">Hugging Face transformers (LayoutLM)</td><td>Comprend conjointement le texte et la mise en page pour localiser les bons champs, même sur des gabarits variés.</td></tr><tr><td class="cc">Extraction d'entités</td><td class="cl">transformers (NER) · spaCy</td><td>Structure montants, dates et clauses en données exploitables.</td></tr><tr><td class="cc">Validation humaine ciblée</td><td class="cl">Label Studio</td><td>Concentre l'humain sur les extractions à faible confiance : sécurise la qualité et produit de nouvelles annotations.</td></tr><tr><td class="cc">Intégration ERP / GED</td><td class="cl">requests (API)</td><td>Injecte les données validées dans les processus : là où le gain de temps se réalise.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Seuils de confiance pilotables par type de document, boucle d'annotation continue et réentraînement périodique du modèle d'extraction.</p>
+</section>
+<h2 class="group">04 · IA générative et systèmes LLM</h2>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">12 · LLM</span>
+      <h3>Copilote de service client</h3>
+    </div>
+    <span class="ops">LLMOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Réduire le temps de traitement des demandes clients et homogénéiser la qualité des réponses, sans risque de réponse non conforme ni fuite de données personnelles.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Temps moyen de traitement (AHT) en baisse significative</li><li>Taux d'adoption des suggestions par les conseillers</li><li>Satisfaction client (CSAT / NPS) stable ou en hausse</li><li>Zéro incident de fuite de données personnelles (PII)</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Contexte client</td><td class="cl">requests (API CRM)</td><td>Apporte l'historique et le contexte : une bonne réponse est d'abord une réponse contextualisée.</td></tr><tr><td class="cc">Génération encadrée</td><td class="cl">SDK anthropic / openai · presidio</td><td>Génère la réponse dans le cadre du prompt système ; presidio détecte et masque les données personnelles avant tout appel.</td></tr><tr><td class="cc">Orchestration</td><td class="cl">LangChain</td><td>Assemble prompt, contexte et post-traitements de façon versionnée et testable.</td></tr><tr><td class="cc">Validation conseiller</td><td class="cl">Streamlit</td><td>Le conseiller reste décideur : il valide, corrige, envoie — garde-fou et source de feedback.</td></tr><tr><td class="cc">Traçabilité</td><td class="cl">LangSmith · MLflow</td><td>Trace chaque interaction (prompt, réponse, décision) pour l'audit et le pilotage qualité.</td></tr><tr><td class="cc">Évaluation continue</td><td class="cl">deepeval</td><td>Rejoue des jeux de tests métier à chaque changement de prompt ou de modèle.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (LLMOps) :</b> LLMOps : registre de prompts versionnés, évaluations automatiques bloquantes avant tout changement, monitoring coût / latence / qualité en production.</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">13 · RAG</span>
+      <h3>Assistant documentaire d'entreprise</h3>
+    </div>
+    <span class="ops">LLMOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Rendre la connaissance interne (normes, procédures, retours d'expérience) accessible en une question, avec des réponses fiables et sourcées, pour réduire le temps de recherche documentaire.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Fidélité et pertinence des réponses (scores ragas au-dessus de la cible)</li><li>Temps de recherche documentaire : de plusieurs minutes à quelques secondes</li><li>Taux d'adoption et d'usage récurrent des équipes</li><li>Déflexion mesurable des sollicitations vers les experts</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Ingestion documentaire</td><td class="cl">unstructured · LlamaIndex</td><td>Absorbe les formats hétérogènes (PDF, Office, wiki) en respectant leur structure.</td></tr><tr><td class="cc">Chunking + embeddings</td><td class="cl">LangChain splitters · sentence-transformers</td><td>Découpe les documents en passages cohérents puis les vectorise : la granularité conditionne la précision.</td></tr><tr><td class="cc">Base vectorielle</td><td class="cl">qdrant-client · chromadb · FAISS</td><td>Retrouve les passages pertinents en millisecondes, en respectant les droits d'accès.</td></tr><tr><td class="cc">Recherche hybride + re-ranking</td><td class="cl">rank_bm25 · cross-encoder</td><td>Combine sémantique et mots-clés puis re-classe finement : le principal levier de qualité d'un RAG.</td></tr><tr><td class="cc">Génération ancrée</td><td class="cl">SDK anthropic / openai</td><td>Rédige la réponse à partir du seul contexte fourni : l'ancrage documentaire réduit les hallucinations.</td></tr><tr><td class="cc">Évaluation</td><td class="cl">ragas</td><td>Mesure en continu fidélité, pertinence et couverture des réponses.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (LLMOps) :</b> LLMOps : ingestion incrémentale des nouveaux documents, évaluation automatique à chaque changement (chunking, embeddings, modèle), citations obligatoires pour l'auditabilité.</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">14 · Agents IA</span>
+      <h3>Agent de codage autonome — du ticket à la merge request</h3>
+    </div>
+    <span class="ops">LLMOps · DevOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Accélérer la livraison logicielle en confiant à un agent les tickets bien délimités (correctifs, tests, refactorings), du ticket à la merge request, sous revue humaine systématique.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Taux de MR acceptées sans reprise majeure</li><li>Lead time ticket → MR en forte baisse</li><li>Couverture de tests en hausse sur le périmètre traité</li><li>Zéro incident de sécurité lié à l'exécution (sandbox)</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Ticket / issue</td><td class="cl">python-gitlab · FastAPI (webhook)</td><td>Capte le ticket et son contexte (code concerné, critères d'acceptation) : le point d'entrée du workflow.</td></tr><tr><td class="cc">Planification</td><td class="cl">LangGraph · SDK anthropic (tool use)</td><td>L'agent décompose la tâche : comprendre le ticket, localiser le code, définir la modification et les tests.</td></tr><tr><td class="cc">Outils de l'agent</td><td class="cl">GitPython · pytest · subprocess</td><td>Les « mains » de l'agent : lire le dépôt, éditer les fichiers, exécuter tests et commandes.</td></tr><tr><td class="cc">Sandbox isolée</td><td class="cl">docker (SDK)</td><td>Isole toute exécution : aucun accès aux systèmes de production — le moindre privilège appliqué à l'agent.</td></tr><tr><td class="cc">Merge request</td><td class="cl">python-gitlab</td><td>Livre un diff propre soumis à revue : rien n'est fusionné sans validation d'un développeur.</td></tr><tr><td class="cc">Observabilité</td><td class="cl">LangSmith · OpenTelemetry</td><td>Trace chaque action et raisonnement de l'agent : audit, débogage, amélioration continue.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (LLMOps · DevOps) :</b> LLMOps + DevOps : l'agent s'insère dans la CI existante (tests verts exigés avant MR), périmètre d'outils minimal, métriques d'acceptation suivies par équipe pour étendre progressivement son champ d'action.</p>
+</section>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">15 · Modèles génératifs (GANs / Diffusion)</span>
+      <h3>Données synthétiques pour l'inspection qualité</h3>
+    </div>
+    <span class="ops">MLOps</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Lever le verrou des défauts rares en vision industrielle : générer des exemples synthétiques réalistes pour entraîner le contrôle qualité là où les données réelles manquent.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Rappel du modèle d'inspection sur défauts rares en hausse mesurable</li><li>Nombre d'images réelles nécessaires fortement réduit</li><li>Délai de qualification d'une nouvelle ligne / référence réduit</li><li>Réalisme validé par revue qualité (taux d'images synthétiques acceptées)</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Corpus réel</td><td class="cl">Pillow · OpenCV</td><td>Prépare et normalise les rares images de défauts disponibles.</td></tr><tr><td class="cc">Fine-tuning LoRA</td><td class="cl">diffusers · peft</td><td>Spécialise un modèle de diffusion sur l'apparence des défauts avec très peu d'images : LoRA rend l'adaptation légère et peu coûteuse.</td></tr><tr><td class="cc">Génération contrôlée</td><td class="cl">diffusers</td><td>Produit la variété manquante : positions, tailles et textures de défauts pilotées.</td></tr><tr><td class="cc">Augmentation classique</td><td class="cl">albumentations</td><td>Complète par les transformations géométriques et photométriques usuelles.</td></tr><tr><td class="cc">CNN d'inspection</td><td class="cl">torchvision · ultralytics</td><td>Le bénéficiaire final : la valeur du synthétique se mesure exclusivement sur ses métriques, testées sur données 100 % réelles.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps) :</b> Filtrage qualité des images générées (score + revue), traçabilité réel / synthétique dans le dataset, validation finale systématique sur données réelles uniquement.</p>
+</section>
+<h2 class="group">05 · Apprentissage par renforcement</h2>
+<section class="fiche">
+  <header class="fh">
+    <div>
+      <span class="fam">16 · Reinforcement Learning</span>
+      <h3>Pick-and-place robotisé — bras Universal Robots UR5</h3>
+    </div>
+    <span class="ops">MLOps · Robotique</span>
+  </header>
+  <div class="cols">
+    <div class="side metier">
+      <h4>Côté métier</h4>
+      <p class="obj"><b>Objectif business :</b> Automatiser une tâche de pick-and-place à forte variabilité (pièces en vrac, positions aléatoires) avec un cobot Universal Robots UR5, là où la programmation classique par trajectoires fixes échoue.</p>
+      <h5>KPI de succès</h5>
+      <ul class="kpis"><li>Taux de prise réussie &gt; 98 % en production</li><li>Temps de cycle par pièce sous la cible de la ligne</li><li>Écart de performance simulation → réel (sim-to-real gap) maîtrisé</li><li>Zéro incident sécurité : limites de force du cobot jamais atteintes</li></ul>
+    </div>
+    <div class="side tech">
+      <h4>Côté technique</h4>
+      <table class="comp">
+        <thead><tr><th>Composant</th><th>Bibliothèques Python</th><th>Fonction et rôle dans le résultat</th></tr></thead>
+        <tbody><tr><td class="cc">Jumeau numérique UR5</td><td class="cl">PyBullet / MuJoCo · Gymnasium</td><td>Terrain d'entraînement sans risque ni usure : des millions d'essais impossibles sur le robot réel.</td></tr><tr><td class="cc">Entraînement PPO / SAC</td><td class="cl">Stable-Baselines3 · Ray RLlib</td><td>Apprend la politique de prise ; la randomisation de domaine (frictions, éclairages, masses) la rend robuste aux écarts sim / réel.</td></tr><tr><td class="cc">Perception RGB-D</td><td class="cl">OpenCV · PyTorch</td><td>Localise les pièces et estime leur pose : les « yeux » de la politique.</td></tr><tr><td class="cc">Transfert sim-to-real</td><td class="cl">ur-rtde · rclpy (ROS 2)</td><td>Déploie la politique sur le bras réel, avec calibration et vitesses réduites au départ.</td></tr><tr><td class="cc">Contrôle temps réel</td><td class="cl">ur-rtde (RTDE 500 Hz)</td><td>Pilote le UR5 via l'interface RTDE native : la boucle de commande effective.</td></tr><tr><td class="cc">Supervision sécurité</td><td class="cl">pandas · OpenTelemetry</td><td>Surveille forces, zones et métriques de prise ; les limites de force natives du cobot restent le filet de sécurité ultime.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="opsnote"><b>Exploitation (MLOps · Robotique) :</b> Apprentissage 100 % en simulation, jamais d'exploration libre sur le robot réel ; déploiement progressif (vitesses réduites) et télémétrie de chaque prise pour un ré-entraînement ciblé.</p>
+</section>
+</main>
+
+<footer>
+  <div class="inner">
+    <p>Volet 2 du référentiel « Grille comparative des modèles d'IA &amp; Machine Learning ». Chaque fiche décrit l'architecture de référence du cas d'usage phare : les objectifs, KPI et composants sont des patrons éprouvés à adapter au contexte (données, contraintes réglementaires, criticité). Juillet 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/animations.js"></script>
+</body>
+</html>
