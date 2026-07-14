@@ -1,0 +1,67 @@
+/* =====================================================================
+   theme.css — variables de couleurs, typographies, navigation, animations
+   Palette et polices communes aux deux pages du site.
+   ===================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100;400;700;800&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+:root{
+  /* ---- Palette ---- */
+  --night:#08212C;   /* fond sombre, textes forts */
+  --green:#ABC022;   /* accent principal */
+  --azure:#0099A5;   /* accent secondaire */
+  --slate:#5D848A;   /* textes atténués */
+  --teal:#00617E;    /* titres de rubriques */
+  --steel:#97B8BB;   /* bordures, éléments discrets */
+  --blue:#75A0D2;    /* deep learning */
+  --gold:#FDC603;    /* génératif, encadrés statistiques */
+  --orange:#F75226;  /* renforcement */
+  /* ---- Typographies ---- */
+  --font-title:'Urbanist','Segoe UI',sans-serif;
+  --font-body:'EB Garamond',Georgia,serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#F4F7F8;color:var(--night);font-family:var(--font-body);font-size:15px;line-height:1.5}
+
+/* =========================== Navigation =========================== */
+.topnav{position:sticky;top:0;z-index:50;height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;background:rgba(8,33,44,.94);backdrop-filter:blur(6px);border-bottom:1px solid rgba(171,192,34,.35)}
+.brand{font-family:var(--font-title);font-weight:800;color:#fff;text-decoration:none;font-size:16px;letter-spacing:.02em}
+.brand span{color:var(--green)}
+.navlinks{display:flex;gap:8px}
+.navbtn{font-family:var(--font-title);font-weight:700;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-decoration:none;padding:8px 16px;border-radius:18px;border:1px solid rgba(151,184,187,.5);transition:all .25s ease}
+.navbtn:hover{border-color:var(--green);color:var(--green);transform:translateY(-1px)}
+.navbtn.active{background:var(--green);border-color:var(--green);color:var(--night)}
+@media(max-width:640px){.navbtn{padding:7px 10px;font-size:11px}.brand{font-size:14px}}
+
+/* =========================== Animations ===========================
+   Les classes ci-dessous sont ajoutées par assets/js/animations.js :
+   sans JavaScript, tout le contenu reste parfaitement visible.       */
+
+/* Révélation des cartes au défilement */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* Schémas SVG des modèles : intro séquencée */
+svg .a-pop{opacity:0;transform:scale(0);transform-origin:center;transform-box:fill-box}
+svg.play .a-pop{animation:aPop .5s cubic-bezier(.34,1.56,.64,1) var(--d,0s) forwards}
+svg .a-fade{opacity:0}
+svg.play .a-fade{animation:aFade .6s ease var(--d,0s) forwards}
+svg .a-draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+svg.play .a-draw{animation:aDraw .8s ease var(--d,0s) forwards}
+@keyframes aPop{to{opacity:1;transform:scale(1)}}
+@keyframes aFade{to{opacity:1}}
+@keyframes aDraw{to{stroke-dashoffset:0}}
+
+/* Flèches des pipelines : pulsation de flux */
+.arr.flow{animation:aPulse 2.4s ease-in-out infinite}
+@keyframes aPulse{0%,100%{opacity:.45}50%{opacity:1}}
+
+/* Puces KPI : apparition en cascade */
+ul.kpis li.kpi-hide{opacity:0;transform:translateX(-8px);transition:opacity .45s ease,transform .45s ease}
+ul.kpis li.kpi-in{opacity:1;transform:none}
+
+/* Accessibilité : préférence de mouvement réduit */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal,svg .a-pop,svg .a-fade{opacity:1!important;transform:none!important}
+  svg .a-draw{stroke-dashoffset:0!important}
+}

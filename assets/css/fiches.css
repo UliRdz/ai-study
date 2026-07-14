@@ -1,0 +1,49 @@
+/* fiches.css — styles des fiches Métier × Technique (fiches.html) */
+400;
+700;
+800&family=EB+Garamond:ital,wght@0,400;
+0,500;
+1,400&display=swap');
+.hero{background:var(--night);color:#fff;padding:44px 32px 34px}
+.hero .inner{max-width:1240px;margin:0 auto}
+.hero .kicker{font-family:var(--font-title);font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin:0 0 10px}
+.hero h1{font-family:var(--font-title);font-weight:800;font-size:32px;margin:0 0 10px;line-height:1.15}
+.hero p.sub{font-size:16.5px;color:var(--steel);max-width:900px;margin:0}
+main{max-width:1240px;margin:0 auto;padding:14px 20px 48px}
+.group{font-family:var(--font-title);font-weight:800;color:var(--teal);font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin:34px 4px 10px;padding-bottom:7px;border-bottom:2px solid var(--green)}
+.fiche{background:#fff;border:1px solid #E3EBEC;border-radius:6px;margin:14px 0;overflow:hidden}
+.fh{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:16px 20px 12px;border-bottom:1px solid #E3EBEC;background:linear-gradient(90deg,#FAFCFC,#fff)}
+.fh .fam{display:block;font-family:var(--font-title);font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);margin-bottom:3px}
+.fh h3{font-family:var(--font-title);font-weight:800;font-size:18px;margin:0;color:var(--night)}
+.ops{flex:none;font-family:var(--font-title);font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--night);color:var(--green);padding:5px 12px;border-radius:14px;white-space:nowrap}
+.cols{display:grid;grid-template-columns:1fr 1.55fr;gap:0}
+.side{padding:16px 20px}
+.side h4{font-family:var(--font-title);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px}
+.metier{border-right:1px solid #E3EBEC;background:#FAFCFA}
+.metier h4{color:var(--teal)}
+.metier h4::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--green);margin-right:7px}
+.tech h4{color:var(--azure)}
+.tech h4::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--azure);margin-right:7px}
+.obj{margin:0 0 12px}
+.obj b{font-family:var(--font-title);font-weight:700;font-size:12.5px;color:var(--teal)}
+.metier h5{font-family:var(--font-title);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin:0 0 6px}
+ul.kpis{margin:0;padding:0;list-style:none}
+ul.kpis li{position:relative;padding:4px 0 4px 20px;font-size:14.5px}
+ul.kpis li::before{content:"▸";position:absolute;left:2px;color:var(--green);font-weight:800;font-family:var(--font-title)}
+table.comp{width:100%;border-collapse:collapse;font-size:13.5px}
+table.comp th{font-family:var(--font-title);font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);text-align:left;padding:4px 8px;border-bottom:1.5px solid var(--steel)}
+table.comp td{padding:6px 8px;border-bottom:1px solid #EDF2F3;vertical-align:top}
+table.comp tr:last-child td{border-bottom:none}
+td.cc{font-family:var(--font-title);font-weight:700;font-size:12.5px;color:var(--night);width:22%}
+td.cl{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;font-weight:600;color:var(--teal);width:24%}
+.opsnote{margin:0;padding:12px 20px;background:#F4F7EE;border-top:1px solid #E3EBEC;font-size:14px}
+.opsnote b{font-family:var(--font-title);font-weight:700;font-size:12px;color:var(--teal);text-transform:uppercase;letter-spacing:.08em}
+footer{background:var(--night);color:var(--steel);padding:26px 32px;font-size:13.5px}
+footer .inner{max-width:1240px;margin:0 auto}
+footer p{margin:0;max-width:1000px;font-style:italic}
+@media(max-width:960px){
+  .cols{grid-template-columns:1fr}
+  .metier{border-right:none;border-bottom:1px solid #E3EBEC}
+  .hero h1{font-size:24px}
+  td.cc,td.cl{width:auto}
+}
